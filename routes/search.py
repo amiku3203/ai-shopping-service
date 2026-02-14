@@ -39,8 +39,12 @@ async def search(search_query: SearchQuery):
         if products and not filters_applied.get("fallback"):
              products = rank_products(products, filters)
 
+        # 5. Generate AI Conversational Response
+        from services.generator import generate_search_response
+        ai_message = generate_search_response(search_query.query, products, filters_applied)
+
         return {
-            "message": message,
+            "message": ai_message,
             "filters_applied": filters_applied,
             "total_results": len(products),
             "products": serialize_mongo_obj(products)
