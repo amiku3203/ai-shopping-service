@@ -2,6 +2,7 @@ from fastapi import APIRouter, HTTPException, Header, Request
 from pydantic import BaseModel
 from typing import List, Optional
 from services.workflow import app, AgentState
+from utils import serialize_mongo_obj
 
 router = APIRouter(prefix="/agent", tags=["AI Agent"])
 
@@ -38,7 +39,7 @@ async def chat_endpoint(request: ChatRequest, authorization: Optional[str] = Hea
             "messages": final_state.get("messages", []),
             "next_step": final_state.get("next_step"),
             "data": {
-                "product": final_state.get("product"),
+                "product": serialize_mongo_obj(final_state.get("product")),
                 "order_status": "created" if final_state.get("next_step") == "end" else None
             }
         }
