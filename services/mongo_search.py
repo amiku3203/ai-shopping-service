@@ -16,6 +16,7 @@ def get_summary_projection():
         "brand": 1,
         "category": 1,
         "features": 1,
+        "stock": 1,
         "summary": 1,       # Added AI summary
         "averageRating": 1, 
         "numReviews": 1     
