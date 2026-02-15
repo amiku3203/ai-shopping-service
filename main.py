@@ -1,6 +1,7 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from routes.search import router as search_router
+from routes.agent import router as agent_router
 from config import settings
 
 app = FastAPI(
@@ -28,6 +29,7 @@ app.add_middleware(
 # Routes
 # -------------------------
 app.include_router(search_router)
+app.include_router(agent_router)
 
 
 # -------------------------
