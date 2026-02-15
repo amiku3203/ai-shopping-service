@@ -18,7 +18,7 @@ app.add_middleware(
     allow_origins=[
         "http://localhost:5173",
         "https://infinite-mart-ecom.vercel.app",
-        "*" # Keep wildcard for dev flexibility if needed, or remove for strict security
+        "https://infinite-mart-assistance.onrender.com", 
     ],
     allow_credentials=True,
     allow_methods=["*"],
