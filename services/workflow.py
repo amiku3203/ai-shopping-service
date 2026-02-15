@@ -149,6 +149,10 @@ def create_order(state: AgentState):
     except Exception as e:
         return {"messages": [f"Error creating order: {str(e)}"], "next_step": "end"}
 
+def login_required_node(state: AgentState):
+    return {"messages": ["You need to be logged in to place an order. Please log in first."], "next_step": "end"}
+
+
 # -----------------
 # 3. Graph Construction
 # -----------------
@@ -161,6 +165,7 @@ workflow.add_node("search_product", search_product_node)
 workflow.add_node("check_stock", check_stock)
 workflow.add_node("collect_info", collect_info)
 workflow.add_node("create_order", create_order)
+workflow.add_node("login_required", login_required_node)
 
 # Set Entry Point
 workflow.set_entry_point("check_login")
@@ -174,7 +179,7 @@ def route_intent(state: AgentState):
     
     if intent == "order":
         if not user:
-            return END  # Must login first
+            return "login_required"  # Must login first
         return "search_product"
     elif intent == "search":
         return "search_product"
@@ -186,6 +191,7 @@ workflow.add_conditional_edges(
     route_intent,
     {
         "search_product": "search_product",
+        "login_required": "login_required",
         END: END
     }
 )
@@ -220,6 +226,7 @@ workflow.add_conditional_edges(
 
 workflow.add_edge("collect_info", "create_order")
 workflow.add_edge("create_order", END)
+workflow.add_edge("login_required", END)
 
 # Compile
 app = workflow.compile()
